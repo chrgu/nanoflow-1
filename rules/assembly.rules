@@ -20,7 +20,7 @@ rule all_final:
 ## Put your favoriate two assemblies as the input 
 rule final_contigs:
  input:
-  config['project_dir'] + '/05_nanopolish/{barcode}/nanopolish.contigs.fasta',
+  config['project_dir'] + '/08_unicycler/{barcode}/assembly.fasta',
   config['project_dir'] + '/09_unicycler_long/{barcode}/assembly.fasta'
  output:
   draft1 = config['project_dir'] + '/reports/final_assembly/{barcode}/draft1.fasta',
@@ -134,7 +134,7 @@ rule minimap2_subsampled_reads:
 
 rule minimap2_corrected_reads:
  input:
-  reads = config['project_dir'] + '/04_canu/{barcode}/canu.correctedReads.fasta.gz',
+  reads = config['project_dir'] + '/05_nanopolish/{barcode}/nanopolish.contigs.fasta',
   draft = config['project_dir'] + '/reports/final_assembly/{barcode}/asm_mapping/draft.fasta',
   index = config['project_dir'] + '/reports/final_assembly/{barcode}/asm_mapping/draft.fasta.amb'
  output:
@@ -182,7 +182,7 @@ rule run_quast:
   config['quast_yaml_fp']
  shell:
   """
-  quast.py -t {threads} --gene-finding --gage -o {params.outdir} \
+  quast.py -t {threads} --gene-finding  -o {params.outdir} \
            --min-contig 100000 -R {input.ref} -G {input.gff} \
            {input.draft1} {input.draft2}
   """

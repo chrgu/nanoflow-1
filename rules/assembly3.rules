@@ -18,10 +18,11 @@ rule run_unicycler_existing_long:
   contigs = config['project_dir'] + '/09_unicycler_long/{barcode}/assembly.fasta'
  threads: 16
  params:
-  outdir = config['project_dir'] + '/09_unicycler_long/{barcode}'
+  outdir = config['project_dir'] + '/09_unicycler_long/{barcode}',
+  merge_mode = config['merge_mode']
  shell:
   """
-  unicycler -1 {input.R1} -2 {input.R2} -l {input.reads} -o {params.outdir} -t {threads} --existing_long_read_assembly {input.longasm}
+  unicycler -1 {input.R1} -2 {input.R2} -l {input.reads} -o {params.outdir} -t {threads} --existing_long_read_assembly {input.longasm} --mode {params.merge_mode}
   """
 
 rule assess_unicycler_existing_long:

@@ -5,21 +5,20 @@
 ####
 
 import os
-#from sbx_igv import * 
+from sbx_igv import * 
 
 workdir: config['project_dir']
 
 with open(config['barcodes_fp']) as f:
  BARCODES = f.read().splitlines()
 
-#include: "rules/basecalling.rules"
-include: "rules/qc.rules"
-#include: "rules/asm_long.rules"
-include: "rules/asm_long_nofast5.rules" #<---- only for tutorial purpose
-
-#include: "rules/draft2.rules"
-#include: "rules/draft3.rules"
-include: "rules/assess_asm.rules"
+include: "rules/basecalling.rules"
+include: "rules/preprocess.rules"
+include: "rules/assembly1.rules"
+#include: "rules/asm_long_nofast5.rules" #<---- only for tutorial purpose
+include: "rules/assembly2.rules"
+include: "rules/assembly3.rules"
+include: "rules/assembly.rules"
 #include: "rules/mapping.rules"
 
 

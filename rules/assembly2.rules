@@ -9,6 +9,27 @@ rule all_draft2:
     step=['08_unicycler'], barcode=BARCODES)
 
 
+rule short_read_only:
+  input:
+   expand(config['project_dir'] + '/reports/{step}/{barcode}/asm.aln.tsv',
+     step=['10_unicycler_short'], barcode=BARCODES)
+
+rule run_unicycler_short:
+ input:
+  R1 = config['project_dir'] + '/' + config['short_reads_fp'] + '/{barcode}/R1.fastq',
+  R2 = config['project_dir'] + '/' + config['short_reads_fp'] + '/{barcode}/R2.fastq'
+ output:
+  contigs = config['project_dir'] + '/10_unicycler_short/{barcode}/assembly.fasta'
+ threads: 8
+ params:
+  outdir = config['project_dir'] + '/10_unicycler_short/{barcode}'
+ shell:
+  """
+  unicycler -1 {input.R1} -2 {input.R2}  -o {params.outdir} -t {threads}
+  """
+
+
+
 ## Unicycler: scaffold Illumina assemblies with long reads
 rule run_unicycler:
  input:
@@ -42,3 +63,23 @@ rule assess_unicycler:
   minimap2 -x map10k -t {threads} -c {input.genome} {output.asm_pieces} > {output.asm_aln}
   python {input.python_ident_fp} {output.asm_pieces} {output.asm_aln} > {output.asm_table}
   """
+
+
+rule assess_unicycler_short:
+ input:
+  genome = config['project_dir'] + '/' + config['genome_fp'],
+  draft_v2 = config['project_dir'] + '/10_unicycler_short/{barcode}/assembly.fasta',
+  python_chop_fp = config['basecalling_cmp_fp'] + '/chop_up_assembly.py',
+  python_ident_fp = config['basecalling_cmp_fp'] + '/read_length_identity.py'
+ output:
+  asm_pieces = config['project_dir'] + '/10_unicycler_short/{barcode}/asm_pieces.fasta',
+  asm_aln = config['project_dir'] + '/10_unicycler_short/{barcode}/asm.aln.paf',
+  asm_table = config['project_dir'] + '/reports/10_unicycler_short/{barcode}/asm.aln.tsv'
+ threads: 8
+ shell:
+  """
+  python {input.python_chop_fp} {input.draft_v2} 10000 > {output.asm_pieces}
+  minimap2 -x map10k -t {threads} -c {input.genome} {output.asm_pieces} > {output.asm_aln}
+  python {input.python_ident_fp} {output.asm_pieces} {output.asm_aln} > {output.asm_table}
+  """
+

@@ -1,29 +1,29 @@
 admins: zhaocy.dut@gmail.com 
-project_dir: /home/chunyu/nanoflow_tutorial
+project_dir: /home/chgu/projects/myco/16_newCanu
 
 ##### basecalling
-raw_fast5_fp: /path/to/dir/raw/fast5/files
+raw_fast5_fp: /home/matteil/run21_myco_28/20190308_1639_T28/fast5/
 flowcell: FLO-MIN106
-kit: SQK-RBK001
+kit: SQK-RBK004
 
-basecalled_fast5_fp1: /path/to/dir/fast5/files/1
-basecalled_fast5_fp2: /path/to/dir/fast5/files/2
+basecalled_fast5_fp1: /home/chgu/projects/myco/15_newCanu/01_basecalled_reads
+basecalled_fast5_fp2: /home/chgu/projects/myco/15_newCanu/01_basecalled_reads
 
 ##### qc
 ##### make sure the following files are in the project_dir
 barcodes_fp: barcodes.txt
-genome_fp: GCF_000417085.fna
-gene_fp: GCF_000417085.gff
+genome_fp: GCF_001632805.fa
+gene_fp: GCF_001632805.gff
 short_reads_fp: short_reads
 
 #### helper scripts
-basecalling_cmp_fp: /home/chunyu/nanoflow/local/Basecalling-comparison
+basecalling_cmp_fp: /home/chgu/nanoflow/local/Basecalling-comparison/analysis_scripts
 canu_genome_size: 5.6m
-canu_fp: /home/chunyu/nanoflow/local/canu-1.8/Linux-amd64/bin
-nanopolish_fp: /home/chunyu/nanoflow/local/nanopolish
+canu_fp: /home/chgu/nanoflow/local/canu-1.9/Linux-amd64/bin
+nanopolish_fp: /home/chgu/nanoflow/local/nanopolish
+merge_mode: conservative
 
-
-quast_yaml_fp: /home/chunyu/nanoflow/quast.yaml
+quast_yaml_fp: /home/chgu/nanoflow/quast.yaml
 igv_prefs : {ENABLE_ANTIALIASING: true, NAME_PANEL_WIDTH: 360, SAM.MAX_VISIBLE_RANGE: 1000}
 keep_unaligned: false
 min_length: 5000

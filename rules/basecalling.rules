@@ -5,7 +5,8 @@
 
 rule all_basecalling:
  input:
-   config['basecalled_fast5_fp1'] + '/Done.Albacore'
+   config['basecalled_fast5_fp1'] + '/Done.Albacore',
+   expand(config['project_dir'] + '/01_basecalled_reads/{barcode}/reads.fastq', barcode = BARCODES)
 
 
 ## Albacore basecall
@@ -14,7 +15,7 @@ rule albacore_basecall:
   raw_fast5_fp = config['raw_fast5_fp']
  output:
   config['basecalled_fast5_fp1'] + '/Done.Albacore'
- threads: 8
+ threads: 16
  params:
   basecalled_fast5_fp = config['basecalled_fast5_fp1']
  shell:
@@ -29,8 +30,8 @@ rule albacore_basecall:
 ## Gather_up_nanopore_fastqs, long reads fastq file
 rule collect_raw_fastq:
  input:
-  fast5_fp1 = config['basecalled_fast5_fp1'] + '/fast5/basecalled_albacore_v2.1/workspace/pass/{barcode}',
-  fast5_fp2 = config['basecalled_fast5_fp2'] + '/fast5/basecalled_albacore_v2.1/workspace/pass/{barcode}' 
+  fast5_fp1 = config['basecalled_fast5_fp1'] + '/workspace/pass/{barcode}',
+  fast5_fp2 = config['basecalled_fast5_fp2'] + '/workspace/pass/{barcode}' 
  output:
   config['project_dir'] + '/01_basecalled_reads/{barcode}/reads.fastq'
  run:
